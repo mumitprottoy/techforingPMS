@@ -1,5 +1,6 @@
 from django.db import models
 from django.core import exceptions
+from . import messages as msg
 
 
 class User(models.Model):
@@ -11,9 +12,15 @@ class User(models.Model):
     date_joined = models.DateTimeField(auto_now_add=True)
     
     @classmethod
-    def authenticate(cls, username: str, password: str):
-        pass
-
+    def authenticate(
+        cls, username: str, password: str) -> tuple[bool, str]:
+        user = cls.objects.filter(username=username)
+        if user is not None:
+            if user.password == password:
+                return True, msg.SUCCESS
+            return False, msg.WRONG_PASSWORD
+        return False, msg.USER_DOES_NOT_EXIST
+            
     def __str__(self) -> str:
         return self.username
 
@@ -37,7 +44,7 @@ class Project(models.Model):
     @property
     def has_admin(self) -> bool:
         return self.members.filter(
-            role=self.members.rel.model.ADMIN).exists()
+            role=self.members.model.ADMIN).exists()
 
     def __str__(self) -> str:
         return self.name
