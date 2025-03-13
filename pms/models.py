@@ -11,7 +11,8 @@ class User(models.Model):
     date_joined = models.DateTimeField(auto_now_add=True)
     
     @classmethod
-    def authenticate(cls, username: str, password: str)
+    def authenticate(cls, username: str, password: str):
+        pass
 
     def __str__(self) -> str:
         return self.username
