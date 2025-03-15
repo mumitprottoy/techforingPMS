@@ -5,6 +5,8 @@ This is a Project Management System (PMS) that allows teams to collaborate on pr
 
 This is developed using Django and Django REST Framework. It includes endpoints for user authentication, projects, tasks, and comments. The project uses SQLite as the database and runs locally on `localhost:8000` or `127.0.0.1:8000`.
 
+[See project description](https://docs.google.com/document/d/1RpBGriJr0dwJHXsEg3_4j8q6HxwHsYcsH0dP5YyITv4/edit?usp=sharing)
+
 ## Prerequisites
 
 Before you begin, ensure that you have the following installed on your local machine:
