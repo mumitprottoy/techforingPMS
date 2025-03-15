@@ -1,0 +1,7 @@
+USER_DOES_NOT_EXIST = 'No user found with this username'
+WRONG_PASSWORD = 'Wrong password'
+SUCCESS = 'Success'
+NOT_PROJECT_MEMBER_ERROR = 'This user is not a member of this project'
+DUPLICATE_PROJECT_MEMBER = 'This user is already a member of this project'
+INVALID_DATA = 'Invalid Data'
+NOT_FOUND = 'Not found'

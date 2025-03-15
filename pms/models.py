@@ -1,6 +1,6 @@
-from django.db import models
-from django.core import exceptions
-from . import messages as msg
+from django.db import models, IntegrityError
+from django.core.exceptions import ValidationError, NON_FIELD_ERRORS
+from utils import messages as msg, exceptions
 
 
 class User(models.Model):
@@ -13,13 +13,13 @@ class User(models.Model):
     
     @classmethod
     def authenticate(
-        cls, username: str, password: str) -> tuple[bool, str]:
-        user = cls.objects.filter(username=username)
+        cls, username: str, password: str) -> tuple[bool, dict | None]:
+        user = cls.objects.filter(username=username).first()
         if user is not None:
             if user.password == password:
-                return True, msg.SUCCESS
-            return False, msg.WRONG_PASSWORD
-        return False, msg.USER_DOES_NOT_EXIST
+                return True, None
+            return False, dict(password=[msg.WRONG_PASSWORD])
+        return False, dict(username=[msg.USER_DOES_NOT_EXIST])
             
     def __str__(self) -> str:
         return self.username
@@ -81,6 +81,13 @@ class ProjectMember(models.Model):
             # assigns this user as the new admin
             self.role = self.__class__.ADMIN
             self.save()
+            
+    def save(self, *args, **kwargs) -> None:
+        if self.role == self.__class__.ADMIN:
+            self.__class__.objects.filter(
+                project=self.project, role=self.__class__.ADMIN).update(
+                    role=self.__class__.MEMBER)
+        super().save(*args, **kwargs) 
     
     def __str__(self):
         return self.user.username
@@ -107,17 +114,19 @@ class Task(models.Model):
     # A task within a project should be assigned to its members, not to other users
     assigned_to = models.ForeignKey(
         ProjectMember, on_delete=models.CASCADE, related_name='assigned_tasks') # get all tasks assigned to a member by member.assigned_tasks.all()
-    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='tasks') # get all tasks within a project by project.tasks.all()
+    project = models.ForeignKey(
+        Project, on_delete=models.CASCADE, related_name='tasks') # get all tasks within a project by project.tasks.all()
     created_at = models.DateTimeField(auto_now_add=True)
     due_date = models.DateTimeField()
     
     def save(self, *args, **kwargs):
         """
-        It must be ensured that the ProjectMember is from the right Project
-        before saving to DB, else raise an exception
+        It must be ensured that the ProjectMember is from 
+        the right Project (self.project) before saving to DB
+        else raise an exception
         """
         if self.assigned_to.project != self.project:
-            raise exceptions.ValidationError('This user is not a member of this project.')
+            raise exceptions.NotProjectMemberError(msg.NOT_PROJECT_MEMBER_ERROR)
         super().save(*args, **kwargs)
 
     def __str__(self) -> str:
