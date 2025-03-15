@@ -1,7 +1,9 @@
 
 # Project Management System API
 
-This project is a Django-based REST API for a project management system, developed using Django and Django REST Framework. It includes endpoints for user authentication, projects, tasks, and comments. The project uses SQLite as the database and runs locally on `localhost:8000`.
+This is a Project Management System (PMS) that allows teams to collaborate on projects. It provides API to manage users, projects, tasks, and comments. The API will be consumed by the front-end web application and mobile application.
+
+This is developed using Django and Django REST Framework. It includes endpoints for user authentication, projects, tasks, and comments. The project uses SQLite as the database and runs locally on `localhost:8000` or `127.0.0.1:8000`.
 
 ## Prerequisites
 
