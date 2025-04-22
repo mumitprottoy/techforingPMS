@@ -13,8 +13,10 @@ class UserRegisterAPI(views.APIView):
     
     def post(self, request: Request) -> Response:
         serializer = serializers.UserSerializer(data=request.data)
+        print(request.data)
         if serializer.is_valid():
-            serializer.save()
+            models.User.objects.create(**request.data)
+            print('user created')
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
@@ -22,8 +24,8 @@ class UserRegisterAPI(views.APIView):
 class UserLoginAPI(views.APIView):
     
     def post(self, request: Request) -> Response:
-        username = request.POST.get('username')
-        password = request.POST.get('password')
+        username = request.data.get('username')
+        password = request.data.get('password')
         authenticated, message = models.User.authenticate(username, password)
         if authenticated:
             user = models.User.objects.get(username=username)
