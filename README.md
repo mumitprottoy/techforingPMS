@@ -52,7 +52,7 @@ source venv/bin/activate
 Install the dependencies listed in the `requirements.txt` file:
 
 ```bash
-pip install -r "requirements.txt"
+pip install -r requirements.txt
 ```
 
 ### 5. Apply migrations
