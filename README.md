@@ -21,8 +21,8 @@ Follow these steps to set up and run the project locally:
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/yourusername/your-repo-name.git
-cd your-repo-name
+[git clone https://github.com/yourusername/your-repo-name.git](https://github.com/mumitprottoy/techforingPMS.git)
+cd techforingPMS
 ```
 
 ### 2. Create a virtual environment
