@@ -13,10 +13,8 @@ class UserRegisterAPI(views.APIView):
     
     def post(self, request: Request) -> Response:
         serializer = serializers.UserSerializer(data=request.data)
-        print(request.data)
         if serializer.is_valid():
-            models.User.objects.create(**request.data)
-            print('user created')
+            serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
